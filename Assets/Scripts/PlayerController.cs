@@ -2,7 +2,11 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Elements")]
+    [SerializeField] private CrowdSystem crowdSystem;
+
     [Header("Settings")]
+    [SerializeField] private float roadWidth;
     [SerializeField] private float moveSpeed;
 
     [Header("Control")]
@@ -10,6 +14,7 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 clickedScreenPosition;
     private Vector3 clickedPlayerPosition;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -38,14 +43,18 @@ public class PlayerController : MonoBehaviour
         else if (Input.GetMouseButton(0))
         {
             float xScreenDifference = Input.mousePosition.x - clickedScreenPosition.x;
+
             xScreenDifference /= Screen.width;
             xScreenDifference *= slideSpeed;
 
-
             Vector3 position = transform.position;
             position.x = clickedPlayerPosition.x + xScreenDifference;
+
+            position.x = Mathf.Clamp(position.x, -roadWidth / 2 + crowdSystem.GetCrowdRadius(),
+                roadWidth / 2 - crowdSystem.GetCrowdRadius());
+
             transform.position = position;
-            
+
             //transform.position = clickedPlayerPosition + Vector3.right * xScreenDifference;
         }
        
