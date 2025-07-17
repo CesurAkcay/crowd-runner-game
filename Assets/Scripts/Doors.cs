@@ -1,10 +1,12 @@
 using UnityEngine;
 using TMPro;
 
+
+public enum BonusType { Addition, Difference, Product, Division } //Holds integers in a string format
+
 public class Doors : MonoBehaviour
 {
 
-    enum BonusType {Addition, Difference, Product, Division } //Holds integers in a string format
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     [Header("Elements")]
@@ -12,6 +14,7 @@ public class Doors : MonoBehaviour
     [SerializeField] private SpriteRenderer leftDoorRenderer;
     [SerializeField] private TextMeshPro rightDoorText;
     [SerializeField] private TextMeshPro leftDoorText;
+    [SerializeField] private Collider collider;
 
     [Header("Settings")]
     [SerializeField] private BonusType rightDoorBonusType;
@@ -82,5 +85,35 @@ public class Doors : MonoBehaviour
             default:
                 break;
         }
+    }
+
+
+    public int GetBonusAmount(float xPosition)
+    {
+        if (xPosition > 0)
+        {
+            return rightDoorBonusAmount;
+        }
+        else
+        {
+            return leftDoorBonusAmount;
+        }
+    }
+
+    public BonusType GetBonusType(float xPosition)
+    {
+        if (xPosition > 0)
+        {
+            return rightDoorBonusType;
+        }
+        else
+        {
+            return leftDoorBonusType;
+        }
+    }
+
+    public void Disaable()
+    {
+        collider.enabled = false;
     }
 }
