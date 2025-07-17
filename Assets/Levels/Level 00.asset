@@ -12,4 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e93b6e328298b44489d98796b6ae93f0, type: 3}
   m_Name: Level 00
   m_EditorClassIdentifier: 
-  chunks: []
+  chunks:
+  - {fileID: 7226437116498925125, guid: 5a7773dd25dc8024888fdbcac40f96ef, type: 3}
+  - {fileID: 7226437116498925125, guid: 98dc85c173d08e64f96256415e021728, type: 3}
+  - {fileID: 5680282716459174856, guid: 77dafc178015db347a9697d57c11b1c9, type: 3}
+  - {fileID: 5680282716459174856, guid: 8e2e25fef350e57488031ca7d0348d0b, type: 3}

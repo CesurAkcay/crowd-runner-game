@@ -1078,7 +1078,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: bf365734d7286494a8d5700893f0a656, type: 2}
+  - {fileID: 2100000, guid: 0e1adb1ed284d1b44ac4f45f6c895e52, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1811,10 +1811,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2672371391012076473}
   - component: {fileID: 5740402411754450939}
-  - component: {fileID: 4217533327106976055}
-  - component: {fileID: 4289717588803480909}
+  - component: {fileID: 6667056378741520714}
   m_Layer: 0
-  m_Name: Runner
+  m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1859,7 +1858,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &4217533327106976055
+--- !u!114 &6667056378741520714
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1868,32 +1867,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 7621607521051725103}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd938701ac3eb9d4bb3b648a6cf4e2bd, type: 3}
+  m_Script: {fileID: 11500000, guid: fa61979e8101f9b4b83befc689b65914, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!136 &4289717588803480909
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7621607521051725103}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 15
-  m_Height: 178.97
-  m_Direction: 1
-  m_Center: {x: 0, y: 101, z: 0}
+  searchRadius: 12
+  moveSpeed: 10
 --- !u!1 &7662532280796645821
 GameObject:
   m_ObjectHideFlags: 0
