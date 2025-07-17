@@ -12,13 +12,26 @@ public class Enemy : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        // Register this enemy with the manager
+        if (EnemyManager.instance != null)
+        {
+            EnemyManager.instance.RegisterEnemy(this);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
         ManageState();
+    }
+    
+    private void OnDestroy()
+    {
+        // Unregister this enemy when destroyed
+        if (EnemyManager.instance != null)
+        {
+            EnemyManager.instance.UnregisterEnemy(this);
+        }
     }
 
     private void ManageState()

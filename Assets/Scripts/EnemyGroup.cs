@@ -25,6 +25,13 @@ public class EnemyGroup : MonoBehaviour
 
     private void GenerateEnemies()
     {
+        // Ensure EnemyManager exists
+        if (EnemyManager.instance == null)
+        {
+            GameObject enemyManagerGO = new GameObject("EnemyManager");
+            enemyManagerGO.AddComponent<EnemyManager>();
+        }
+        
         for(int i = 0; i < amount; i++)
         {
             Vector3 enemyLocalPosition = GetRunnerLocalPosition(i);

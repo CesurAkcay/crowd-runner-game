@@ -12,6 +12,21 @@ public class CrowdSystem : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private float radius;
     [SerializeField] private float angle;
+    
+    public static CrowdSystem instance;
+    
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -22,6 +37,46 @@ public class CrowdSystem : MonoBehaviour
     void Update()
     {
         PlaceRunners();
+        CheckEnemyPlayerBalance();
+    }
+
+    private void CheckEnemyPlayerBalance()
+    {
+        if (!GameManager.instance.IsGameState()) return;
+        
+        int playerCount = GetRunnerCount();
+        int enemyCount = EnemyManager.instance != null ? EnemyManager.instance.GetActiveEnemyCount() : 0;
+        
+        // If enemies outnumber players and there are players left, eliminate all players
+        if (enemyCount > playerCount && playerCount > 0)
+        {
+            EliminateAllRunners();
+        }
+    }
+    
+    public int GetRunnerCount()
+    {
+        return runnersParent.childCount;
+    }
+    
+    private void EliminateAllRunners()
+    {
+        // Remove all runners
+        for (int i = runnersParent.childCount - 1; i >= 0; i--)
+        {
+            Transform runner = runnersParent.GetChild(i);
+            runner.SetParent(null);
+            Destroy(runner.gameObject);
+        }
+        
+        // Switch to idle animation since no runners left
+        playerAnimator.Idle();
+        
+        // Trigger game over if no runners left
+        if (GetRunnerCount() <= 0)
+        {
+            GameManager.instance.SetGameState(GameManager.GameState.GameOver);
+        }
     }
 
     private void PlaceRunners() 
@@ -94,6 +149,12 @@ public class CrowdSystem : MonoBehaviour
             runnerToRemove.SetParent(null);
 
             Destroy(runnerToRemove.gameObject);
+        }
+        
+        // Check if all runners are gone
+        if (GetRunnerCount() <= 0)
+        {
+            GameManager.instance.SetGameState(GameManager.GameState.GameOver);
         }
     }
 }
