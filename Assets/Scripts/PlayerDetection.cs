@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerDetection : MonoBehaviour
 {
@@ -33,6 +34,11 @@ public class PlayerDetection : MonoBehaviour
                 doors.Disaable();
 
                 crowdSystem.ApplyBonus(bonusType, bonusAmount);
+            }
+            else if (detectedColliders[i].tag == "Finish")
+            {
+                Debug.Log("We hit the finish line");
+                SceneManager.LoadScene(0);
             }
         }
     }
