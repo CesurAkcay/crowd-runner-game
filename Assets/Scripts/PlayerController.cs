@@ -55,20 +55,17 @@ public class PlayerController : MonoBehaviour
 
     private void GameStateChangedCallback(GameManager.GameState gameState)
     {
-        switch (gameState)
+        if (gameState == GameManager.GameState.Game)
         {
-            case GameManager.GameState.Menu:
-                StopMoving();
-                break;
-            case GameManager.GameState.Game:
-                StartMoving();
-                break;
-            case GameManager.GameState.LevelComplete:
-                StopMoving();
-                break;
-            case GameManager.GameState.GameOver:
-                StopMoving();
-                break;
+            StartMoving();
+        }
+        else if (gameState == GameManager.GameState.GameOver)
+        {
+            StopMoving();
+        }
+        else if (gameState == GameManager.GameState.LevelComplete)
+        {
+            StopMoving();
         }
     }
 

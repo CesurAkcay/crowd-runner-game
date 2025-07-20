@@ -31,7 +31,7 @@ public class PlayerDetection : MonoBehaviour
                 int bonusAmount = doors.GetBonusAmount(transform.position.x); 
                 BonusType bonusType = doors.GetBonusType(transform.position.x);
 
-                doors.Disaable();
+                doors.Disable();
 
                 crowdSystem.ApplyBonus(bonusType, bonusAmount);
             }

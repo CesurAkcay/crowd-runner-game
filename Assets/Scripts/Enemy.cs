@@ -27,10 +27,10 @@ public class Enemy : MonoBehaviour
         {
             case State.Idle:
                 SearchForTarget();
-                break;
+            break;
             case State.Running:
                 RunTowardsTarget();
-                break;
+            break;
         }
     }
 
@@ -48,13 +48,13 @@ public class Enemy : MonoBehaviour
                 runner.SetTarget();
                 targetRunner = runner.transform; // Just in order to store the target runner
 
-                StartRunningTowardTarger();
+                StartRunningTowardTarget();
             }
         }
     }
 
     // This is a method to switch from idle state to running state
-    private void StartRunningTowardTarger()
+    private void StartRunningTowardTarget()
     {
         currentState = State.Running;     //Grab the Animator component and play the run animation
         GetComponent<Animator>().Play("Run");
@@ -63,7 +63,6 @@ public class Enemy : MonoBehaviour
     {
         if (targetRunner == null)
         {
-            currentState = State.Idle;
             return;
         }
 

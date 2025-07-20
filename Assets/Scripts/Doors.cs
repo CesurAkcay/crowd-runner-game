@@ -112,7 +112,7 @@ public class Doors : MonoBehaviour
         }
     }
 
-    public void Disaable()
+    public void Disable()
     {
         collider.enabled = false;
     }
