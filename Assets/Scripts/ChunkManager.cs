@@ -21,8 +21,7 @@ public class ChunkManager : MonoBehaviour
         }
         else
         {
-            instance = this;
-            DontDestroyOnLoad(gameObject); // Keep this GameObject across scenes
+            instance = this;  // Keep this GameObject across scenes
         }
     }
     void Start()

@@ -21,14 +21,13 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        if (instance == null)
+        if (instance != null)
         {
-            instance = this;
-            DontDestroyOnLoad(gameObject); // Keep this GameObject across scenes
+            Destroy(gameObject); // Ensure only one instance exists
         }
         else
         {
-            Destroy(gameObject); // Ensure only one instance exists
+            instance = this;
         }
     }
 

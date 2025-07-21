@@ -4,6 +4,7 @@ using System;
 public class SoundsManager : MonoBehaviour
 {
     [Header("Sounds")]
+    [SerializeField] private AudioSource buttonSound;
     [SerializeField] private AudioSource doorHitSound;
     [SerializeField] private AudioSource runnerDieSound;
     [SerializeField] private AudioSource levelCompleteSound;
@@ -40,7 +41,7 @@ public class SoundsManager : MonoBehaviour
         runnerDieSound.Play();
     }
 
-    private void GameStatusChangedCallback(GameManager.GameState gameState)
+    public void GameStatusChangedCallback(GameManager.GameState gameState)
     {
         if (gameState == GameManager.GameState.GameOver)
         {
@@ -57,4 +58,21 @@ public class SoundsManager : MonoBehaviour
         doorHitSound.Play();
     }
 
+    public void DisableSounds()
+    {
+        doorHitSound.volume = 0f;
+        runnerDieSound.volume = 0f;
+        levelCompleteSound.volume = 0f;
+        gameOverSound.volume = 0f;
+        buttonSound.volume = 0f;
+    }
+
+    public void EnableSounds()
+    {
+        doorHitSound.volume = 1f;
+        runnerDieSound.volume = 1f;
+        levelCompleteSound.volume = 1f;
+        gameOverSound.volume = 1f;
+        buttonSound.volume = 1f;
+    }
 }
