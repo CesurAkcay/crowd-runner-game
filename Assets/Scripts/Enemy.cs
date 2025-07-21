@@ -1,5 +1,7 @@
-using UnityEngine;
 using System;
+using TMPro;
+using UnityEngine;
+using static UnityEngine.UIElements.UxmlAttributeDescription;
 public class Enemy : MonoBehaviour
 {
     enum State {Idle, Running}
@@ -39,19 +41,23 @@ public class Enemy : MonoBehaviour
 
     private void SearchForTarget()
     {
-        //OverlapSphere creates a sphere around the enemy to detect nearby runners
-        Collider[] detectedColliiders = Physics.OverlapSphere(transform.position, searchRadius);     
-        for (int i = 0; i < detectedColliiders.Length; i++)
+        Collider[] detectedColliders = Physics.OverlapSphere(transform.position, searchRadius);
+
+        for (int i = 0; i < detectedColliders.Length; i++)
         {
-            if(detectedColliiders[i].TryGetComponent(out Runner runner))
+            if (detectedColliders[i].TryGetComponent(out Runner runner))
             {
-                if (runner.IsTarget()) // Check if the runner is already a target
+                if (runner.IsTarget())
                     continue;
 
                 runner.SetTarget();
-                targetRunner = runner.transform; // Just in order to store the target runner
+                targetRunner = runner.transform;
+
+                // Debug: Show what we're actually targeting
+                Debug.Log($"Targeting runner at transform: {runner.transform.position}, collider center: {detectedColliders[i].bounds.center}");
 
                 StartRunningTowardTarget();
+                return;
             }
         }
     }
@@ -70,15 +76,38 @@ public class Enemy : MonoBehaviour
             return;
         }
 
-        transform.position = Vector3.MoveTowards(transform.position, targetRunner.position, 
+        // Use collider center instead of transform position for accurate distance
+        Vector3 targetPosition = targetRunner.position;
+        if (targetRunner.TryGetComponent(out Collider targetCollider))
+        {
+            targetPosition = targetCollider.bounds.center;
+        }
+
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition,
             Time.deltaTime * moveSpeed);
 
-        if (Vector3.Distance(transform.position, targetRunner.position) < .1f) 
-        { 
-            onRunnerDied?.Invoke(); // Invoke the event when the enemy reaches the target runner
+        float distance = Vector3.Distance(transform.position, targetPosition);
 
-            Destroy(targetRunner.gameObject); // Destroy the target runner when reached
-            Destroy(gameObject); // Destroy the enemy when it reaches the target
+        if (distance < 0.5f) // Increased threshold to account for collider sizes
+        {
+            onRunnerDied?.Invoke();
+            Destroy(targetRunner.gameObject);
+            Destroy(gameObject);
         }
     }
+    // Add this to Enemy.cs and make sure Enemy has a Trigger Collider
+    private void OnTriggerEnter(Collider other)
+    {
+        if (currentState == State.Idle && other.TryGetComponent(out Runner runner))
+        {
+            if (!runner.IsTarget())
+            {
+                runner.SetTarget();
+                targetRunner = runner.transform;
+                StartRunningTowardTarget();
+            }
+        }
+    }
+
+
 }
