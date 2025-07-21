@@ -16,13 +16,15 @@ public class Runner : MonoBehaviour
         
     }
 
+    public void SetTarget()
+    {
+        isTarget = true;
+    }
+
     public bool IsTarget() 
     {
         return isTarget;
     }
 
-    public void SetTarget() 
-    {
-        isTarget = true;
-    }
+ 
 }

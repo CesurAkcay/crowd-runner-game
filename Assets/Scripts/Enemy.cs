@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using System;
 public class Enemy : MonoBehaviour
 {
     enum State {Idle, Running}
@@ -9,6 +9,9 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float moveSpeed;
     private State currentState;
     private Transform targetRunner;
+
+    [Header("Events")]
+    public static Action onRunnerDied; // Event to notify when a runner is killed by the enemy
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -63,6 +66,7 @@ public class Enemy : MonoBehaviour
     {
         if (targetRunner == null)
         {
+            currentState = State.Idle;
             return;
         }
 
@@ -71,6 +75,8 @@ public class Enemy : MonoBehaviour
 
         if (Vector3.Distance(transform.position, targetRunner.position) < .1f) 
         { 
+            onRunnerDied?.Invoke(); // Invoke the event when the enemy reaches the target runner
+
             Destroy(targetRunner.gameObject); // Destroy the target runner when reached
             Destroy(gameObject); // Destroy the enemy when it reaches the target
         }

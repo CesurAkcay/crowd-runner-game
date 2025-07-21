@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-        
+        PlayerPrefs.DeleteAll(); // Clear PlayerPrefs for testing purposes
     }
 
     // Update is called once per frame

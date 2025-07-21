@@ -49,7 +49,7 @@ MonoBehaviour:
   enemyPrefab: {fileID: 6667056378741520714, guid: a39c959434d8cf74487978976882179e, type: 3}
   enemiesParent: {fileID: 1876667367960871514}
   amount: 10
-  radius: 0.4
+  radius: 1
   angle: 137
 --- !u!1 &1215714934260816835
 GameObject:
