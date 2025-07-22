@@ -4,7 +4,7 @@ using UnityEngine;
 using static UnityEngine.UIElements.UxmlAttributeDescription;
 public class Enemy : MonoBehaviour
 {
-    enum State {Idle, Running}
+    enum State { Idle, Running }
 
     [Header("Settings")]
     [SerializeField] private float searchRadius;
@@ -17,7 +17,7 @@ public class Enemy : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -32,10 +32,10 @@ public class Enemy : MonoBehaviour
         {
             case State.Idle:
                 SearchForTarget();
-            break;
+                break;
             case State.Running:
                 RunTowardsTarget();
-            break;
+                break;
         }
     }
 
@@ -98,16 +98,24 @@ public class Enemy : MonoBehaviour
     // Add this to Enemy.cs and make sure Enemy has a Trigger Collider
     private void OnTriggerEnter(Collider other)
     {
-        if (currentState == State.Idle && other.TryGetComponent(out Runner runner))
+        if (other.TryGetComponent(out Runner runner))
         {
-            if (!runner.IsTarget())
+            Transform runnersParent = runner.transform.parent;
+            int runnersCount = runnersParent.childCount;
+            if (runnersCount > 3)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            if (currentState == State.Idle && !runner.IsTarget())
             {
                 runner.SetTarget();
                 targetRunner = runner.transform;
                 StartRunningTowardTarget();
             }
         }
+
+
     }
-
-
 }
