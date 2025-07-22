@@ -2,6 +2,7 @@ using System;
 using TMPro;
 using UnityEngine;
 using static UnityEngine.UIElements.UxmlAttributeDescription;
+using Random = UnityEngine.Random;
 public class Enemy : MonoBehaviour
 {
     enum State { Idle, Running }
@@ -9,6 +10,8 @@ public class Enemy : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private float searchRadius;
     [SerializeField] private float moveSpeed;
+    [SerializeField] private int runnerThreshold = 3;
+
     private State currentState;
     private Transform targetRunner;
 
@@ -17,13 +20,26 @@ public class Enemy : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
+        // Add a small delay to prevent immediate conflicts
+        Invoke(nameof(StartSearching), 0.1f);
     }
 
     // Update is called once per frame
     void Update()
     {
-        ManageState();
+        // Only manage state if we are still alive
+        if(this != null)
+        {
+            ManageState();
+        }
+    }
+
+    private void StartSearching()
+    {
+        if(currentState == State.Idle)
+        {
+            SearchForTarget(); 
+        }
     }
 
     private void ManageState()
@@ -31,7 +47,11 @@ public class Enemy : MonoBehaviour
         switch (currentState)
         {
             case State.Idle:
-                SearchForTarget();
+                // Only search periodically to avoid constant searching,not every frame
+                if (Time.frameCount % 30 == 0) // Every 30 frames
+                {
+                    SearchForTarget();
+                }
                 break;
             case State.Running:
                 RunTowardsTarget();
@@ -41,6 +61,10 @@ public class Enemy : MonoBehaviour
 
     private void SearchForTarget()
     {
+        // Don't search for a new target while running
+        if (currentState == State.Running)
+            return; 
+
         Collider[] detectedColliders = Physics.OverlapSphere(transform.position, searchRadius);
 
         for (int i = 0; i < detectedColliders.Length; i++)
@@ -52,11 +76,9 @@ public class Enemy : MonoBehaviour
 
                 runner.SetTarget();
                 targetRunner = runner.transform;
-
-                // Debug: Show what we're actually targeting
-                Debug.Log($"Targeting runner at transform: {runner.transform.position}, collider center: {detectedColliders[i].bounds.center}");
-
                 StartRunningTowardTarget();
+
+                Invoke(nameof(CheckForOverwhelm), 1.5f); // Check for overwhelm after a short delay
                 return;
             }
         }
@@ -96,26 +118,24 @@ public class Enemy : MonoBehaviour
         }
     }
     // Add this to Enemy.cs and make sure Enemy has a Trigger Collider
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.TryGetComponent(out Runner runner))
-        {
-            Transform runnersParent = runner.transform.parent;
-            int runnersCount = runnersParent.childCount;
-            if (runnersCount > 3)
-            {
-                Destroy(gameObject);
-                return;
-            }
+    
 
-            if (currentState == State.Idle && !runner.IsTarget())
+    private void CheckForOverwhelm()
+    {
+        if (targetRunner != null)
+        {
+            Transform runnersParent = targetRunner.parent;
+            int runnersCount = runnersParent.childCount;
+
+            if (runnersCount > runnerThreshold)
             {
-                runner.SetTarget();
-                targetRunner = runner.transform;
-                StartRunningTowardTarget();
+                Debug.Log($"Enemy overwhelmed! {runnersCount} runners > {runnerThreshold}");
+                Destroy(gameObject);
+            }
+            else
+            {
+                Debug.Log($"Enemy continues chase. {runnersCount} runners <= {runnerThreshold}");
             }
         }
-
-
     }
 }
